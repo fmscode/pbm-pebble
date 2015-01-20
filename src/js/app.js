@@ -13,6 +13,12 @@ var APIURL = 'http://pinballmap.com/api/v1/'
 var locationCoords = null;
 var region = false;
 var events = [];
+var locationOptions = {
+   enableHighAccuracy: true, 
+   maximumAge: 10000, 
+   timeout: 10000
+};
+
 // Cards
 var nearestLocationCard = new UI.Card({
    title: 'Nearest Location',
@@ -54,6 +60,17 @@ var recentsMenu = new UI.Menu({
 var eventsMenu = new UI.Menu({
    title: 'Upcoming Event'
 });
+// Menu interaction
+mainMenu.on('select',function(indexPath){
+   var indexRow = indexPath.itemIndex;
+   if (indexRow == 0){
+      reloadNearestLocationCard();
+   }else if (indexRow == 1){
+      recentlyAddedMachines();
+   }else if (indexRow == 2){
+      upcomingEvents();
+   }
+})
 eventsMenu.on('select',function(indexPath){
    if (events.length > 0){
       var indexRow = indexPath.itemIndex;
@@ -68,38 +85,12 @@ eventsMenu.on('select',function(indexPath){
       eventCard.show();
    }
 })
-mainMenu.on('select',function(indexPath){
-   var indexRow = indexPath.itemIndex;
-   if (indexRow == 0){
-      reloadNearestLocationCard();
-   }else if (indexRow == 1){
-      recentlyAddedMachines();
-   }else if (indexRow == 2){
-      upcomingEvents();
-   }
-})
-function reloadNearestLocationCard(){
-   nearestLocationCard.title('Nearest Location');
-   nearestLocationCard.body('');
-   nearestLocationCard.subtitle('Finding......');
-   nearestLocationCard.show();
-
-   navigator.geolocation.getCurrentPosition(function(pos){
-      locationCoords = pos.coords;
-      console.log('Found new geolocation');
-
-      findNearestLocations(function(foundLocation){
-         console.log(foundLocation.distance);
-
-         nearestLocationCard.title(foundLocation.name);
-         nearestLocationCard.body('\n'+foundLocation.street+', '+foundLocation.city);
-         nearestLocationCard.subtitle((Math.round(foundLocation.distance*100)/100)+' mi');
-      });
-   }, locationError, locationOptions)
-}
-// Initial Splash Screen
+/**
+*
+*  Initial Splash Screen
+*
+*/
 var splashWindow = new UI.Window();
-// Text element to inform user
 var text = new UI.Text({
    position: new Vector2(0, 0),
    size: new Vector2(144, 168),
@@ -117,11 +108,6 @@ splashWindow.show();
 *  Geolocation code.
 *
 */
-var locationOptions = {
-   enableHighAccuracy: true, 
-   maximumAge: 10000, 
-   timeout: 10000
-};
 function locationSuccess(pos) {
    locationCoords = pos.coords;
    if (!region){
@@ -145,6 +131,25 @@ navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locatio
 *  Nearest location
 *
 */
+function reloadNearestLocationCard(){
+   nearestLocationCard.title('Nearest Location');
+   nearestLocationCard.body('');
+   nearestLocationCard.subtitle('Finding......');
+   nearestLocationCard.show();
+
+   navigator.geolocation.getCurrentPosition(function(pos){
+      locationCoords = pos.coords;
+      console.log('Found new geolocation');
+
+      findNearestLocations(function(foundLocation){
+         console.log(foundLocation.distance);
+
+         nearestLocationCard.title(foundLocation.name);
+         nearestLocationCard.body('\n'+foundLocation.street+', '+foundLocation.city);
+         nearestLocationCard.subtitle((Math.round(foundLocation.distance*100)/100)+' mi');
+      });
+   }, locationError, locationOptions)
+}
 function findNearestLocations(completionBlock){
    var nearestURL = APIURL+'locations/closest_by_lat_lon.json?lat='+locationCoords.latitude+'&lon='+locationCoords.longitude;
    console.log(nearestURL);
