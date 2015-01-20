@@ -225,7 +225,7 @@ function recentlyAddedMachines(){
 *
 */
 function upcomingEvents(){
-   var eventsURL = APIURL+'region/'+'portland'+'/events.json';//APIURL+'region/'+region.name+'/events.json';
+   var eventsURL = APIURL+'region/'+region.name+'/events.json';
    console.log(eventsURL);
    ajax(
       {
@@ -251,7 +251,7 @@ function upcomingEvents(){
             }
          }else{
             eventItems = [{
-               title: 'No Upcoming Events'
+               title: 'No Upcoming'
             }]
          }
          var eventSection = {
