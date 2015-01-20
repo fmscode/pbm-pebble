@@ -44,6 +44,10 @@
         "type": "font",
         "name": "MONO_FONT_14",
         "file": "fonts/UbuntuMono-Regular.ttf"
+      }, {
+        "type": "png",
+        "name": "REFRESH_ACTION_IMAGE",
+        "file": "images/refresh.png"
       }
     ]
   }

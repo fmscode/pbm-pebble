@@ -16,7 +16,14 @@ var events = [];
 // Cards
 var nearestLocationCard = new UI.Card({
    title: 'Nearest Location',
-   subtitle: 'Finding......'
+   subtitle: 'Finding......',
+   scrollable: true,
+   action: {
+      select: 'REFRESH_ACTION_IMAGE'
+   }
+});
+nearestLocationCard.on('click','select',function(){
+   reloadNearestLocationCard();
 });
 // Menus
 var mainMenu = new UI.Menu({
@@ -64,10 +71,22 @@ eventsMenu.on('select',function(indexPath){
 mainMenu.on('select',function(indexPath){
    var indexRow = indexPath.itemIndex;
    if (indexRow == 0){
-      nearestLocationCard.title('Nearest Location');
-      nearestLocationCard.body('');
-      nearestLocationCard.subtitle('Finding......');
-      nearestLocationCard.show();
+      reloadNearestLocationCard();
+   }else if (indexRow == 1){
+      recentlyAddedMachines();
+   }else if (indexRow == 2){
+      upcomingEvents();
+   }
+})
+function reloadNearestLocationCard(){
+   nearestLocationCard.title('Nearest Location');
+   nearestLocationCard.body('');
+   nearestLocationCard.subtitle('Finding......');
+   nearestLocationCard.show();
+
+   navigator.geolocation.getCurrentPosition(function(pos){
+      locationCoords = pos.coords;
+      console.log('Found new geolocation');
 
       findNearestLocations(function(foundLocation){
          console.log(foundLocation.distance);
@@ -76,15 +95,10 @@ mainMenu.on('select',function(indexPath){
          nearestLocationCard.body('\n'+foundLocation.street+', '+foundLocation.city);
          nearestLocationCard.subtitle((Math.round(foundLocation.distance*100)/100)+' mi');
       });
-   }else if (indexRow == 1){
-      recentlyAddedMachines();
-   }else if (indexRow == 2){
-      upcomingEvents();
-   }
-})
+   }, locationError, locationOptions)
+}
 // Initial Splash Screen
 var splashWindow = new UI.Window();
-
 // Text element to inform user
 var text = new UI.Text({
    position: new Vector2(0, 0),
