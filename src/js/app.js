@@ -72,8 +72,8 @@ mainMenu.on('select',function(indexPath){
          console.log(foundLocation.distance);
 
          nearestLocationCard.title(foundLocation.name);
-         nearestLocationCard.body(foundLocation.street+', '+foundLocation.city+'\n\n'+(Math.round(foundLocation.distance*100)/100)+' Miles from current location.');
-         nearestLocationCard.subtitle('');
+         nearestLocationCard.body('\n'+foundLocation.street+', '+foundLocation.city);
+         nearestLocationCard.subtitle((Math.round(foundLocation.distance*100)/100)+' mi');
       });
    }else if (indexRow == 1){
       recentlyAddedMachines();
