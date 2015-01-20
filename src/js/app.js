@@ -1,9 +1,10 @@
 /**
-* Welcome to Pebble.js!
-*
-* This is where you write your app.
-*/
-
+ *  Pinball Map for Pebble
+ *  Uses Pebble.js (http://developer.getpebble.com/guides/js-apps/pebble-js/)
+ *  
+ *  Written by: Frank Michael Sanchez
+ *  GitHub: https://github.com/fmscode/pbm-pebble
+ */
 var UI = require('ui');
 var ajax = require('ajax');
 var Vector2 = require('vector2');
