@@ -44,7 +44,7 @@ var mainMenu = new UI.Menu({
                icon: 'IMAGE_MENU_ICON'
             },
             {
-               title: 'Recently',
+               title: 'Recent',
                icon: 'IMAGE_RECENTS_ICON'
             },
             {
@@ -221,8 +221,8 @@ function recentlyAddedMachines(){
       function(data){
          recentMachines = data.location_machine_xrefs;
          var machineItems = [];
-         for (var i = recentMachines.length - 1; i >= 0; i--) {
-            var locationMachine = recentMachines[i];
+         for (var i = 0; i < recentMachines.length; i++) {
+            var locationMachine= recentMachines[i];
             var machineItem = {
                title: locationMachine.location.name,
                subtitle: locationMachine.machine.name
