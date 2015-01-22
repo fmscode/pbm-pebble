@@ -1,11 +1,11 @@
 {
-  "uuid": "133215f0-cf20-4c05-997b-3c9be5a64e5b",
+  "uuid": "41c0c9e0-2fe0-4975-af16-7893612b537a",
   "shortName": "PBM",
   "longName": "Pinball Map",
   "companyName": "Frank Michael Sanchez",
   "versionCode": 1,
   "versionLabel": "0.1",
-  "capabilities": [ "configurable" ],
+  "capabilities": [  ],
   "watchapp": {
     "watchface": false
   },
