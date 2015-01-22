@@ -13,6 +13,7 @@ var APIURL = 'http://pinballmap.com/api/v1/'
 var locationCoords = null;
 var region = false;
 var events = [];
+var recentMachines = [];
 var locationOptions = {
    enableHighAccuracy: true, 
    maximumAge: 10000, 
@@ -83,6 +84,22 @@ eventsMenu.on('select',function(indexPath){
       })
       eventCard.scrollable(true);
       eventCard.show();
+   }
+})
+recentsMenu.on('select',function(indexPath){
+   if (recentMachines.length > 0){
+      var indexRow = indexPath.itemIndex;
+      var machineLocation = recentMachines[indexRow];
+
+      var distance = distanceForLocations(locationCoords.latitude,locationCoords.longitude,machineLocation.location.lat,machineLocation.location.lon);
+
+      var machineLocationCard = new UI.Card({
+         title: machineLocation.location.name,
+         subtitle: machineLocation.machine.name,
+         body: '\n'+machineLocation.location.street+', '+machineLocation.location.city+'\n\n'
+      })
+      machineLocationCard.scrollable(true)
+      machineLocationCard.show()
    }
 })
 /**
@@ -202,10 +219,10 @@ function recentlyAddedMachines(){
          type: 'json' 
       },
       function(data){
-         var machines = data.location_machine_xrefs;
+         recentMachines = data.location_machine_xrefs;
          var machineItems = [];
-         for (var i = machines.length - 1; i >= 0; i--) {
-            var locationMachine = machines[i];
+         for (var i = recentMachines.length - 1; i >= 0; i--) {
+            var locationMachine = recentMachines[i];
             var machineItem = {
                title: locationMachine.location.name,
                subtitle: locationMachine.machine.name
@@ -275,8 +292,26 @@ function convertDateString(dateString){
    var date = new Date(dateString);
    return (date.getMonth()+1)+'/'+date.getDate()+'/'+date.getFullYear()
 }
+/**
+*
+*  Distance Formulas
+*
+*/
+function distanceForLocations(lon1, lat1, lon2, lat2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2-lat1);  // Javascript functions in radians
+  var dLon = deg2rad(lon2-lon1); 
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+          Math.sin(dLon/2) * Math.sin(dLon/2); 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c; // Distance in km
+  return d*0.62137;
+}
 
-
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
+}
 
 
 
