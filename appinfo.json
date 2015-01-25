@@ -4,7 +4,7 @@
   "longName": "Pinball Map",
   "companyName": "Frank Michael Sanchez",
   "versionCode": 1,
-  "versionLabel": "0.1",
+  "versionLabel": "1.0",
   "capabilities": [  ],
   "watchapp": {
     "watchface": false
